@@ -1,6 +1,8 @@
 # Created by pyp2rpm-3.3.5
 %global pypi_name rstr
 
+%bcond_without tests
+
 Name:           python-%{pypi_name}
 Version:        2.1.0
 Release:        1%{?dist}
@@ -11,8 +13,12 @@ URL:            http://bitbucket.org/leapfrogdevelopment/rstr/overview
 Source0:        %{pypi_source}
 BuildArch:      noarch
 
-BuildRequires:  python3-devel
+BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python3dist(setuptools)
+
+%if %{with tests}
+BuildRequires:  python3dist(rstr)
+%endif
 
 %description
 rstr is a helper module for easily generating random strings of various types.
@@ -20,11 +26,11 @@ It could be useful for fuzz testing, generating dummy data, or other
 applications. It has no dependencies outside the standard library, and should
 be compatible with Python 3.
 
-%package -n     python3-%{pypi_name}
+%package -n     python%{python3_pkgversion}-%{pypi_name}
 Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name}
+%description -n python%{python3_pkgversion}-%{pypi_name}
 rstr is a helper module for easily generating random strings of various types.
 It could be useful for fuzz testing, generating dummy data, or other
 applications. It has no dependencies outside the standard library, and should
@@ -42,8 +48,10 @@ rm -rf %{pypi_name}.egg-info
 %install
 %py3_install
 
+%if %{with tests}
 %check
 %{__python3} setup.py test
+%endif
 
 %files -n python3-%{pypi_name}
 %{python3_sitelib}/%{pypi_name}
