@@ -1,14 +1,16 @@
 # Created by pyp2rpm-3.3.5
 %global pypi_name rstr
-
-%bcond_without tests
+%global _description %{expand:
+rstr is a helper module for easily generating random strings of various types.
+It could be useful for fuzz testing, generating dummy data, or other
+applications.}
 
 Name:           python-%{pypi_name}
-Version:        2.1.0
+Version:        2.2.6
 Release:        1%{?dist}
 Summary:        Generate random strings in Python
 
-License:        None
+License:        BSD
 URL:            http://bitbucket.org/leapfrogdevelopment/rstr/overview
 Source0:        %{pypi_source}
 BuildArch:      noarch
@@ -16,26 +18,13 @@ BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python3dist(setuptools)
 
-%if %{with tests}
-BuildRequires:  python3dist(rstr)
-%endif
-
-%description
-rstr is a helper module for easily generating random strings of various types.
-It could be useful for fuzz testing, generating dummy data, or other
-applications. It has no dependencies outside the standard library, and should
-be compatible with Python 3.
+%description %_description
 
 %package -n     python%{python3_pkgversion}-%{pypi_name}
 Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-rstr is a helper module for easily generating random strings of various types.
-It could be useful for fuzz testing, generating dummy data, or other
-applications. It has no dependencies outside the standard library, and should
-be compatible with Python 3.
-
+%description -n python%{python3_pkgversion}-%{pypi_name} %_description
 
 %prep
 %autosetup -n %{pypi_name}-%{version}
@@ -48,15 +37,17 @@ rm -rf %{pypi_name}.egg-info
 %install
 %py3_install
 
-%if %{with tests}
 %check
+export PYTHONPATH=%{buildroot}%{python3_sitelib}
 %{__python3} setup.py test
-%endif
 
 %files -n python3-%{pypi_name}
 %{python3_sitelib}/%{pypi_name}
 %{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
 
 %changelog
+* Thu Feb 04 2021 Frédéric Pierret (fepitre) <frederic.pierret@qubes-os.org> - 2.2.6-1
+- Update to 2.2.6
+
 * Tue Jan 05 2021 Frédéric Pierret (fepitre) <frederic.pierret@qubes-os.org> - 2.1.0-1
 - Initial package.
