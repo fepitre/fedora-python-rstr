@@ -11,7 +11,7 @@ Release:        1%{?dist}
 Summary:        Generate random strings in Python
 
 License:        BSD
-URL:            http://bitbucket.org/leapfrogdevelopment/rstr/overview
+URL:            https://files.pythonhosted.org/packages/source/r/rstr/%{name}-%{version}.tar.gz
 Source0:        %{pypi_source}
 BuildArch:      noarch
 
